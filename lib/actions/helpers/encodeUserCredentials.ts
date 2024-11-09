@@ -1,21 +1,12 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { serialize } from "cookie";
 
 const domain = process.env.NODE_ENV === 'production' ? process.env.DOMAIN : 'localhost';
 
 export async function encodeUserCredentials(creds: User) {
     const stringifiedInfo = JSON.stringify(creds);
     const encodedInfo = Buffer.from(stringifiedInfo, "utf-8").toString('base64');
-
-    const cookie = serialize('e_creds', encodedInfo, {
-        path: '/',
-        domain: domain  ,
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-    });
 
     cookies().set('e_creds', encodedInfo, {
         path: '/',
