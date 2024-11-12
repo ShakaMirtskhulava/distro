@@ -8,8 +8,6 @@ import { getUserToken } from "../helpers/getUserToken";
 import { revalidateTag } from "next/cache";
 import { encodeUserCredentials } from "../helpers/encodeUserCredentials";
 
-// User login logic
-
 export async function loginUser({ email, password }: LoginData) {
   if (!email || !password) {
     return { status: 400, message: "Please fill all fields." };
@@ -50,16 +48,30 @@ export async function loginUser({ email, password }: LoginData) {
   }
 }
 
-// User logout logic
-
 export async function logoutUser() {
-  cookies().delete("user");
-  cookies().delete("e_creds");
+  const domain = process.env.NODE_ENV === 'production' ? process.env.DOMAIN : 'localhost';
+
+  cookies().set('user', '', {
+    path: '/',
+    domain: domain,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    expires: new Date(0)
+  });
+
+  cookies().set('e_creds', '', {
+    path: '/',
+    domain: domain,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    expires: new Date(0)
+  });
+
   revalidateTag("auth");
   return redirect("/auth/login");
 }
-
-// Get User information
 
 export async function getUserAuthStatus() {
   const token = await getUserToken();
@@ -87,8 +99,6 @@ export async function getUserAuthStatus() {
     return { status: 500, message: "Internal Server Error", data: null };
   }
 }
-
-// User Google autentication
 
 export async function loginUserWithGoogle(code: string) {
   try {

@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 
 const domain = process.env.NODE_ENV === 'production' ? process.env.DOMAIN : 'localhost';
 
+
 export async function encodeUserCredentials(creds: User) {
     const stringifiedInfo = JSON.stringify(creds);
     const encodedInfo = Buffer.from(stringifiedInfo, "utf-8").toString('base64');
@@ -14,6 +15,7 @@ export async function encodeUserCredentials(creds: User) {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
+        expires: new Date(Date.now() + 9 * 60 * 60 * 24 * 1000)
     });
 }
 
