@@ -54,8 +54,8 @@ export async function logoutUser() {
   cookies().set('user', '', {
     path: '/',
     domain: domain,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    httpOnly: false,
+    secure: false,//process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     expires: new Date(0)
   });
@@ -63,8 +63,8 @@ export async function logoutUser() {
   cookies().set('e_creds', '', {
     path: '/',
     domain: domain,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    httpOnly: false,
+    secure: false,//process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     expires: new Date(0)
   });

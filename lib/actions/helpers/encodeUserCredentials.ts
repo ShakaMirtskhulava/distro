@@ -12,8 +12,8 @@ export async function encodeUserCredentials(creds: User) {
     cookies().set('e_creds', encodedInfo, {
         path: '/',
         domain: domain,
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        httpOnly: false,
+        secure: false,//process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         expires: new Date(Date.now() + 9 * 60 * 60 * 24 * 1000)
     });
